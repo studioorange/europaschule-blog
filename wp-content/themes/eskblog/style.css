@@ -1,0 +1,536 @@
+/*
+Theme Name: ESK Blog
+Description: Blog Theme der Europaschule Köln Community
+Author: Studio Orange
+Author URI: https://www.studioorange.de
+Template: uncode
+Version: 1.0.0
+Text Domain: eskblog
+*/
+
+/* ========================================
+   CSS Custom Properties (Design System)
+   ======================================== */
+:root {
+    /* Brand Colors - Europaschule */
+    --brand-primary: #145e7e;
+    --brand-secondary: #f49c00;
+    --brand-dark: #0b0b0b;
+    --brand-light: #f7f7f7;
+    --brand-white: #ffffff;
+
+    /* Typography */
+    --font-family-primary: "Lato", sans-serif;
+    --font-family-thin: "Lato Thin", sans-serif;
+    --font-family-bold: "Lato Bold", sans-serif;
+    --font-size-base: 16px;
+    --font-size-small: 14px;
+    --font-size-large: 18px;
+    --font-size-h1: 32px;
+    --line-height-base: 1.6;
+
+    /* Spacing */
+    --spacing-xs: 8px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+    --spacing-lg: 48px;
+
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-smooth: 0.4s cubic-bezier(0.25, 0.45, 0.4, 1);
+}
+
+/* ========================================
+   Fonts
+   ======================================== */
+
+/* lato-300 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Lato Thin";
+  font-style: normal;
+  font-weight: 300;
+  src: url("fonts/lato-v24-latin-300.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* lato-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 400;
+  src: url("fonts/lato-v24-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* lato-700 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Lato Bold";
+  font-style: normal;
+  font-weight: 700;
+  src: url("fonts/lato-v24-latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* Hide Service on Desktop */
+
+@media (min-width: 960px) {
+  #menu-item-132761 {
+    display: none;
+  }
+}
+
+.site-footer a {
+  border-bottom: none !important;
+}
+
+/* Tabs */
+
+.uncode-accordion:not(.default-typography) .panel-title > a > span {
+  font-size: 20px;
+}
+
+/* Deactivate Border Shadow Frame */
+.body-borders .body-border-shadow {
+  box-shadow: none;
+}
+
+/* Deactivate top border for top bar
+.body-borders[data-border="27"] .top-border {
+    height: 0px !important;
+}
+ */
+
+/* Logo */
+
+#menu-primary-menu,
+.menu-smart {
+  margin-top: 0px;
+}
+
+.top-menu a {
+  color: #fff !important;
+}
+
+/* Links */
+
+.btn-link {
+  position: relative;
+}
+
+.btn-link:before {
+  content: "";
+  text-decoration: none;
+  transition: transform 0.4s cubic-bezier(0.25, 0.45, 0.4, 1);
+  position: absolute;
+  width: 100%;
+  height: 0.075em;
+  background: currentColor;
+  top: 120%;
+  left: 0;
+  pointer-events: none;
+}
+
+.btn-link:before {
+  transform-origin: 0% 50%;
+  transform: scale3d(1, 1, 1);
+}
+.btn-link:hover:before {
+  transform-origin: 100% 50%;
+  transform: scale3d(0, 1, 1);
+}
+
+.btn-link:hover,
+.btn-link:active {
+  color: #0b0b0b !important;
+}
+
+/* News */
+
+.tmb .t-entry p.t-entry-meta span,
+.tmb .t-entry p.t-entry-comments,
+.tmb .t-entry p.t-entry-author span.tmb-username-wrap {
+  font-size: 14px;
+}
+
+.t-entry .fa-plus2 {
+  display: none;
+}
+
+/* Buttons */
+
+a.custom-link:hover,
+a.custom-link:active {
+  color: #0b0b0b !important;
+}
+
+/* Footer */
+
+.site-footer a:hover,
+.site-footer a:active,
+.site-footer a.custom-link:hover,
+.site-footer a.custom-link:active {
+  color: #fff !important;
+}
+
+/* Blog */
+
+.t-entry-author {
+  display: none;
+}
+
+.t-entry hr {
+  display: none;
+}
+
+/* Links */
+.uncode_text_column a {
+  color: #145e7e !important;
+  margin: 0;
+  display: inline-block;
+}
+.uncode_text_column a:after {
+  display: block;
+  content: "";
+  border-bottom: solid 2px #145e7e;
+  transform: scaleX(0);
+  transition: transform 250ms ease-in-out;
+}
+
+.uncode_text_column a:hover:after {
+  transform: scaleX(1);
+}
+.uncode_text_column a:after {
+  transform-origin: 0% 50%;
+}
+
+.mat-footer a {
+  color: #fff !important;
+  margin: 0;
+  display: inline-block;
+}
+.mat-footer a:after {
+  display: block;
+  content: "";
+  border-bottom: solid 1px #fff;
+  transform: scaleX(0);
+  transition: transform 250ms ease-in-out;
+}
+
+.mat-footer a:hover:after {
+  transform: scaleX(1);
+}
+.mat-footer a:after {
+  transform-origin: 0% 50%;
+}
+
+.tmb-dark.tmb .t-entry-text .t-entry-title a:hover,
+.tmb-dark.tmb .t-entry-text .t-entry-title a:active {
+  color: #f49c00;
+}
+
+.green .tmb-light.tmb .t-entry-text p a {
+  color: #145e7e;
+}
+
+/* Liste */
+
+.uncode_text_column li {
+  margin-left: 18px;
+}
+
+ul.icons {
+  list-style-position: outside !important;
+}
+
+@media (min-width: 960px) {
+  .submenu-dark .menu-sub-enhanced .menu-smart ul a {
+    color: rgba(255, 255, 255, 1);
+  }
+}
+
+/* Submenu */
+
+.submenu-dark .menu-horizontal.menu-sub-enhanced .menu-smart ul a:hover,
+.submenu-dark .menu-horizontal.menu-sub-enhanced .menu-smart ul a:focus,
+.submenu-dark .menu-horizontal.menu-sub-enhanced .menu-smart ul li.active > a {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* Menu 
+
+#menu-primary-menu,
+.menu-smart {
+  margin-top: 20px;
+}
+*/
+
+/* Sitemenu */
+
+#menu-sitemenu li {
+  display: inline;
+  padding-right: 9px;
+}
+
+/* Formulare */
+
+.wpcf7-acceptance .wpcf7-list-item-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.webkit input[type="checkbox"],
+.webkit input[type="radio"],
+.android input[type="checkbox"],
+.android input[type="radio"] {
+  background-color: #f7f7f7 !important;
+  width: 20px;
+  height: 20px;
+}
+
+/* Veranstaltungen */
+
+@media (min-width: 768px) {
+  .tribe-events-meta-group {
+    padding: 10px;
+    width: auto;
+  }
+}
+
+dl {
+  margin: 18px 18px 0px 18px;
+}
+
+.hp-events .tmb-light.tmb .t-entry-text p {
+  color: #0b0b0b;
+  font-size: 18px;
+}
+
+/* Taeser */
+
+.icon-absolut-right .icon-box-icon {
+  bottom: 10px;
+  right: 0px;
+}
+
+@media (max-width: 1100px) {
+  .fontsize-117537 {
+    font-size: 46px;
+  }
+}
+
+@media (max-width: 959px) {
+  .menu-container .logo-container {
+    position: relative;
+    padding: 27px 18px 27px 18px !important;
+  }
+
+  body.menu-mobile-centered
+    .main-menu-container
+    .menu-horizontal
+    .menu-horizontal-inner
+    ul.menu-smart:not(.menu-primary-inner)
+    li.menu-item-link
+    > a {
+    font-size: 6.5vw !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .body-borders[data-border="27"] .top-border {
+    height: 18px !important;
+  }
+
+  .mobile-additional-icons,
+  .mobile-menu-button {
+    margin-top: 30px;
+  }
+
+  .menu-close-search {
+    margin-top: 0px !important;
+  }
+
+  .mobile-additional-icon i,
+  #masthead .overlay .mobile-menu-button.menu-close-search::after {
+    font-size: 22px;
+  }
+
+  .column-background .background-wrapper .background-inner {
+    background-image: none;
+  }
+
+  .text-lead > * {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 959px) {
+  .top-menu.top-menu-enhanced
+    .row-menu-inner
+    .menu-smart
+    > li.social-icon
+    > a
+    i {
+    font-size: 20px;
+    padding: 3px;
+  }
+}
+
+/* ========================================
+   Mobile CTA Button in Header
+   ======================================== */
+.mobile-cta-menu {
+  display: none;
+}
+
+@media (max-width: 959px) {
+  .mobile-cta-menu {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+  }
+
+  .mobile-cta-menu .mobile-cta-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mobile-cta-menu .mobile-cta-list li {
+    margin: 0;
+  }
+
+  .mobile-cta-menu .mobile-cta-list a {
+    display: inline-block;
+    background-color: var(--brand-secondary, #f49c00);
+    color: #fff !important;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .mobile-cta-menu .mobile-cta-list a:hover,
+  .mobile-cta-menu .mobile-cta-list a:active {
+    background-color: var(--brand-primary, #145e7e);
+    color: #fff !important;
+  }
+
+  /* Position the CTA before hamburger menu */
+  .mmb-container {
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* ========================================
+   User Submitted Posts Form Styling
+   ======================================== */
+.usp-form {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.usp-form .usp-fieldset {
+  margin-bottom: 24px;
+}
+
+.usp-form .usp-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--brand-dark, #0b0b0b);
+}
+
+.usp-form .usp-input,
+.usp-form .usp-textarea,
+.usp-form .usp-select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: var(--font-family-primary, "Lato", sans-serif);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.usp-form .usp-input:focus,
+.usp-form .usp-textarea:focus,
+.usp-form .usp-select:focus {
+  outline: none;
+  border-color: var(--brand-primary, #145e7e);
+  box-shadow: 0 0 0 3px rgba(20, 94, 126, 0.1);
+}
+
+.usp-form .usp-textarea {
+  min-height: 200px;
+  resize: vertical;
+}
+
+.usp-form .usp-submit {
+  background-color: var(--brand-secondary, #f49c00);
+  color: #fff;
+  border: none;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.usp-form .usp-submit:hover {
+  background-color: var(--brand-primary, #145e7e);
+}
+
+/* File Upload Styling */
+.usp-form .usp-files {
+  border: 2px dashed #ddd;
+  padding: 20px;
+  text-align: center;
+  border-radius: 4px;
+  background-color: var(--brand-light, #f7f7f7);
+}
+
+.usp-form .usp-files:hover {
+  border-color: var(--brand-primary, #145e7e);
+}
+
+/* Category Checkboxes */
+.usp-form .usp-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.usp-form .usp-checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* Captcha Question */
+.usp-form .usp-captcha {
+  background-color: var(--brand-light, #f7f7f7);
+  padding: 16px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+
+/* Success/Error Messages */
+.usp-success {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 16px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+
+.usp-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 16px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}

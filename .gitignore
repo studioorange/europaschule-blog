@@ -1,0 +1,51 @@
+# WordPress Core (not tracked)
+wp-admin/
+wp-includes/
+wp-*.php
+index.php
+license.txt
+readme.html
+xmlrpc.php
+
+# Configuration
+wp-config.php
+wp-config-local.php
+
+# Uploads (too large for git)
+wp-content/uploads/
+
+# Plugins (install via WordPress)
+wp-content/plugins/
+
+# Parent Theme (licensed separately)
+wp-content/themes/uncode/
+
+# Uncode Package
+Uncode/
+
+# Languages
+wp-content/languages/
+
+# Logs
+wp-content/debug.log
+*.log
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Backups
+*.sql
+*.sql.gz
+deployment-backup*/
+.env.deploy*
+
+# Assets to upload manually
+Europaschule-Koeln-Logo.svg
+favicon.png

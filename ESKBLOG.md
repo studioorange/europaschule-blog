@@ -1,0 +1,245 @@
+# ESK Blog - Europaschule Köln Community
+
+## Projektübersicht
+
+**Website:** Blog für Europaschule Köln - Schüler & Alumni Community
+**Anlass:** 50-Jahresfeier der Europaschule Köln
+
+**Live-URL (geplant):** https://blog.europaschulekoeln.eu
+**Lokal:** http://localhost:8201
+
+**Status:** ✅ Installation abgeschlossen - Grundkonfiguration läuft
+
+---
+
+## 🎯 Konzept & Ziele
+
+### Projektziel
+Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerungen zu ihrer Schulzeit posten können. Der Blog ist Teil der Feierlichkeiten zum 50-jährigen Jubiläum.
+
+### Sicherheitskonzept
+- **Separate Installation:** Blog läuft auf eigenem Server/Subdomain, getrennt von der Hauptseite
+- **Begründung:** Bei einem Hack geht nur der Blog offline, nicht die gesamte Europaschule-Website
+- **Freigabeprozess:** Alle Beiträge müssen vor Veröffentlichung geprüft und freigegeben werden
+
+### Benutzer-Konzept
+
+**Rollen:**
+| Rolle | Rechte | Zielgruppe |
+|-------|--------|------------|
+| Contributor | Beiträge einreichen (keine Veröffentlichung) | Schüler, Alumni |
+| Editor | Beiträge prüfen, bearbeiten, freigeben | Schuladministration |
+| Administrator | Vollzugriff | Studio Orange / IT |
+
+**Frontend-Formular:**
+- Benutzerfreundliches Eingabeformular ohne WordPress-Login
+- Senkt Hemmschwelle für Beiträge
+- Felder: Titel, Text, Bilder, Kategorie-Auswahl
+- Spam-Schutz integriert
+
+### Freigabe-Workflow
+1. Schüler/Alumni reicht Beitrag ein (via Frontend-Formular oder WP-Backend)
+2. E-Mail-Benachrichtigung an Editor
+3. Editor prüft Inhalt auf Angemessenheit
+4. Freigabe oder Rückfrage/Ablehnung
+5. Veröffentlichung
+
+### Kategorien (5 Basis-Themen)
+- **Schüler** – Aktuelle Geschichten
+- **Alumni** – Erinnerungen ehemaliger Schüler
+- **Projekte** – Schulprojekte und Aktionen
+- **Events** – Veranstaltungen und Feiern
+- **Schulleben** – Alltag an der Europaschule
+- **Internationales** – Austausch, Erasmus+, etc.
+
+---
+
+## 🛠 Technische Spezifikationen
+
+### WordPress Setup
+- **Version:** WordPress 6.x (aktuell)
+- **Haupttheme:** Uncode (Premium Theme)
+- **Child-Theme:** ESK Blog v1.0.0
+- **Datenbank:** MySQL `eskblog_local`
+- **Tabellen-Präfix:** `eskb_`
+- **PHP:** 8.4.x
+- **Memory Limit:** 256M
+
+### Design-System
+```css
+:root {
+    --brand-primary: #145e7e;    /* Blau */
+    --brand-secondary: #f49c00;  /* Orange */
+    --brand-dark: #0b0b0b;
+    --brand-light: #f7f7f7;
+    --brand-white: #ffffff;
+}
+```
+
+---
+
+## 🚀 Lokale Entwicklungsumgebung
+
+### Server
+- **Webserver:** nginx + php-fpm
+- **Port:** 8201
+- **Config:** `/opt/homebrew/etc/nginx/servers/eskblog.conf`
+
+### Datenbank
+- **Host:** localhost
+- **Database:** eskblog_local
+- **User:** root
+- **Password:** (leer)
+- **Prefix:** eskb_
+
+### URLs
+- **Frontend:** http://localhost:8201
+- **Admin:** http://localhost:8201/wp-admin/
+
+---
+
+## 🔌 Installierte Plugins
+
+### Uncode Plugins
+- Uncode Core
+- Uncode WPBakery Page Builder
+- Uncode Wireframes
+- Uncode Privacy
+- Uncode Dave's WordPress Live Search
+- LayerSlider
+- RevSlider
+- VC Clipboard
+- VC Particles Background
+
+### Standard Plugins
+- Contact Form 7
+- Yoast SEO
+- Adminimize
+- CMS Tree Page View
+- SVG Support
+- Better Search Replace
+- Duplicate Post
+- Akismet
+
+### Workflow & Formular Plugins (11.12.2025)
+- **PublishPress Planner** – Editorial Workflow & Notifications
+- **User Submitted Posts** – Frontend-Formular für Beitragseinreichung
+
+---
+
+## 📁 Projektstruktur
+
+```
+/Users/orange/Sites/europaschule-blog/
+├── wp-content/
+│   ├── themes/
+│   │   ├── uncode/          # Parent Theme
+│   │   └── eskblog/         # Child Theme (kopiert von Europaschule)
+│   │       ├── functions.php
+│   │       ├── style.css
+│   │       └── fonts/       # Lato Webfonts
+│   └── plugins/             # 19 Plugins
+├── wp-config.php
+├── Uncode/                  # Theme-Paket (Lizenz)
+├── Europaschule-Koeln-Logo.svg  # Logo für Upload
+├── favicon.png              # Favicon für Upload
+└── ESKBLOG.md
+```
+
+---
+
+## 📝 Offene ToDo-Liste
+
+### Priorität 1: Installation abschließen ✅
+- [x] WordPress-Installation auf separatem Server/Subdomain
+- [x] Admin-User erstellen
+- [x] Child-Theme "ESK Blog" aktivieren
+- [x] Plugins aktivieren
+- [x] Permalinks auf "Beitragsname" setzen
+- [x] SSL-Zertifikat (lokal nicht relevant)
+
+### Priorität 2: Grundkonfiguration ✅
+- [x] Uncode Theme-Optionen konfigurieren (von Europaschule übernommen)
+- [x] Logo einbinden
+- [x] Favicon einbinden
+- [x] Kategorien anlegen (6 Themen)
+- [x] Footer Content Block importiert
+- [x] 9 Beispiel-Beiträge importiert
+- [x] Demo-Layout eingerichtet
+
+### Priorität 3: Freigabe-Workflow & Benutzer-System ✅
+- [x] Benutzerrollen konfiguriert (Mitarbeiter/Contributor, Redakteur/Editor)
+- [x] PublishPress Planner installiert und aktiviert
+- [x] E-Mail-Benachrichtigungen konfiguriert:
+  - "Pending Review" → Benachrichtigung an Admin/Editor
+  - "Published" → Benachrichtigung an Autor
+- [x] Freigabe-Workflow getestet (funktioniert)
+
+### Priorität 4: Frontend-Formular ⏳
+- [x] Plugin ausgewählt: **User Submitted Posts**
+- [x] Plugin installiert und Grundkonfiguration
+- [x] CTA-Button im Mobile-Header (via Filter `uncode_mobile_extra_menu_elements`)
+- [ ] **TODO:** Formular-Styling CSS prüfen und anpassen
+- [ ] Formular-Seite mit Shortcode `[user-submitted-posts]` erstellen
+- [ ] Spam-Schutz (Challenge Question) konfigurieren
+
+### Priorität 5: Sicherheit
+- [ ] Security-Plugin installieren (Solid Security / Wordfence)
+- [ ] Login-Schutz aktivieren
+- [ ] Backup-Lösung einrichten
+- [ ] Firewall konfigurieren
+
+### Priorität 6: Design & Finalisierung
+- [x] Farben an Europaschule anpassen (via Theme übernommen)
+- [x] Footer Content Block importiert (ID: 166309)
+- [ ] Header/Menü anpassen
+- [ ] Blog-Startseite finalisieren
+- [ ] Mobile-Ansicht testen
+
+### Priorität 7: Dokumentation & Schulung
+- [ ] Admin-Anleitung für Freigabeprozess erstellen
+- [ ] Schritt-für-Schritt-Anleitung für Schüler/Alumni
+- [ ] Online-Schulung durchführen (60 Min.)
+
+---
+
+## 🔧 Nächste Schritte
+
+1. ~~**Benutzerrollen:** Contributor/Editor-Rollen konfigurieren~~ ✅
+2. ~~**Freigabe-Workflow:** PublishPress Planner eingerichtet~~ ✅
+3. **Frontend-Formular:** Styling anpassen, Seite erstellen
+4. **Sicherheit:** Security-Plugins aktivieren
+5. **Schulung:** Dokumentation und Einweisung vorbereiten
+
+---
+
+## 📋 Changelog
+
+### 11.12.2025 - Workflow & Formular Setup
+- PublishPress Planner installiert und konfiguriert
+- E-Mail-Benachrichtigungen eingerichtet (Pending Review, Published)
+- User Submitted Posts Plugin installiert
+- Mobile CTA-Button im Header implementiert (`functions.php`)
+- CSS für Mobile CTA und Formular-Styling hinzugefügt (`style.css`)
+- Benutzerrollen getestet (Mitarbeiter → Redakteur → Veröffentlichung)
+
+### 08.12.2025 - Grundkonfiguration
+- Demo-Beiträge importiert
+- Kategorien angelegt
+- Footer Content Block importiert
+
+### 02.12.2025 - Theme Setup
+- Child-Theme von Europaschule kopiert
+- Uncode Theme Options per DB übertragen
+
+### 26.11.2025 - Installation
+- Lokale WordPress-Installation
+- nginx + php-fpm Konfiguration
+
+---
+
+**Erstellt:** 26.11.2025
+**Aktualisiert:** 11.12.2025
+**Version:** 1.2.0 (Workflow & Formular)
+**Entwicklungsumgebung:** macOS mit nginx + php-fpm
+**Ansprechpartner Kunde:** Herr Gruner (Europaschule Köln)
