@@ -179,8 +179,8 @@ Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerun
 - [x] Plugin ausgewählt: **User Submitted Posts**
 - [x] Plugin installiert und Grundkonfiguration
 - [x] CTA-Button im Mobile-Header (via Filter `uncode_mobile_extra_menu_elements`)
+- [x] Formular-Seite mit Shortcode `[user-submitted-posts]` erstellt
 - [ ] **TODO:** Formular-Styling CSS prüfen und anpassen
-- [ ] Formular-Seite mit Shortcode `[user-submitted-posts]` erstellen
 - [ ] Spam-Schutz (Challenge Question) konfigurieren
 
 ### Priorität 5: Sicherheit
@@ -193,6 +193,9 @@ Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerun
 - [x] Farben an Europaschule anpassen (via Theme übernommen)
 - [x] Footer Content Block importiert (ID: 166309)
 - [ ] Header/Menü anpassen
+- [ ] **Kategorien ins Menü aufnehmen**
+- [ ] **Kategorie-Übersichtsseiten erstellen/stylen**
+- [ ] **Blog-Startseite: Beiträge mit Kategorie-Anzeige**
 - [ ] Blog-Startseite finalisieren
 - [ ] Mobile-Ansicht testen
 
