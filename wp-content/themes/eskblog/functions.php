@@ -112,6 +112,52 @@ function eskblog_mobile_cta_button($content) {
 }
 
 /**
+ * German validation messages for User Submitted Posts form
+ * Overrides Parsley.js validation messages to German
+ */
+add_action('wp_footer', 'eskblog_german_validation_messages');
+function eskblog_german_validation_messages() {
+    // Only load on pages with the USP form
+    if (!has_shortcode(get_post()->post_content ?? '', 'user-submitted-posts')) {
+        return;
+    }
+    ?>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Parsley.js German translations
+        if (typeof Parsley !== 'undefined') {
+            Parsley.addMessages('de', {
+                defaultMessage: "Dieser Wert ist ungültig.",
+                type: {
+                    email:        "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+                    url:          "Bitte geben Sie eine gültige URL ein.",
+                    number:       "Bitte geben Sie eine gültige Nummer ein.",
+                    integer:      "Bitte geben Sie eine ganze Zahl ein.",
+                    digits:       "Bitte geben Sie nur Ziffern ein.",
+                    alphanum:     "Bitte geben Sie nur Buchstaben und Zahlen ein."
+                },
+                notblank:       "Dieses Feld darf nicht leer sein.",
+                required:       "Dieses Feld ist erforderlich.",
+                pattern:        "Dieser Wert ist ungültig.",
+                min:            "Dieser Wert muss größer oder gleich %s sein.",
+                max:            "Dieser Wert muss kleiner oder gleich %s sein.",
+                range:          "Dieser Wert muss zwischen %s und %s liegen.",
+                minlength:      "Bitte geben Sie mindestens %s Zeichen ein.",
+                maxlength:      "Bitte geben Sie maximal %s Zeichen ein.",
+                length:         "Die Länge muss zwischen %s und %s Zeichen liegen.",
+                mincheck:       "Bitte wählen Sie mindestens %s Optionen.",
+                maxcheck:       "Bitte wählen Sie maximal %s Optionen.",
+                check:          "Bitte wählen Sie zwischen %s und %s Optionen.",
+                equalto:        "Dieses Feld muss identisch sein."
+            });
+            Parsley.setLocale('de');
+        }
+    });
+    </script>
+    <?php
+}
+
+/**
  * Allow editors to see access the Menus page under Appearance but hide other options
  * Note that users who know the correct path to the hidden options can still access them
  */

@@ -175,13 +175,17 @@ Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerun
   - "Published" → Benachrichtigung an Autor
 - [x] Freigabe-Workflow getestet (funktioniert)
 
-### Priorität 4: Frontend-Formular ⏳
+### Priorität 4: Frontend-Formular ✅
 - [x] Plugin ausgewählt: **User Submitted Posts**
 - [x] Plugin installiert und Grundkonfiguration
 - [x] CTA-Button im Mobile-Header (via Filter `uncode_mobile_extra_menu_elements`)
 - [x] Formular-Seite mit Shortcode `[user-submitted-posts]` erstellt
-- [ ] **TODO:** Formular-Styling CSS prüfen und anpassen
-- [ ] Spam-Schutz (Challenge Question) konfigurieren
+- [x] Formular-Styling CSS angepasst (12.12.) - Selektoren auf `#usp_form` korrigiert
+- [x] Formular-Styling mit Playwright MCP geprüft und finalisiert
+- [x] Spam-Schutz (Challenge Question) aktiviert
+- [x] Deutsche Fehlermeldungen für Parsley.js Validierung (`functions.php`)
+- [x] Input-Felder auf volle Breite angepasst
+- [x] Antispam-Feld mit orangenem Pflichtfeld-Indikator
 
 ### Priorität 5: Sicherheit
 - [ ] Security-Plugin installieren (Solid Security / Wordfence)
@@ -192,12 +196,14 @@ Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerun
 ### Priorität 6: Design & Finalisierung
 - [x] Farben an Europaschule anpassen (via Theme übernommen)
 - [x] Footer Content Block importiert (ID: 166309)
-- [ ] Header/Menü anpassen
+- [x] Header: CTA-Button und Burger-Menü vertikal ausgerichtet (alle Breakpoints)
+- [x] Burger-Menü 25% größer skaliert
+- [x] Off-Canvas-Menü: Petrol-Hintergrund, weiße Schrift
 - [ ] **Kategorien ins Menü aufnehmen**
 - [ ] **Kategorie-Übersichtsseiten erstellen/stylen**
 - [ ] **Blog-Startseite: Beiträge mit Kategorie-Anzeige**
 - [ ] Blog-Startseite finalisieren
-- [ ] Mobile-Ansicht testen
+- [ ] Mobile-Ansicht testen (weitere Tests)
 
 ### Priorität 7: Dokumentation & Schulung
 - [ ] Admin-Anleitung für Freigabeprozess erstellen
@@ -217,6 +223,24 @@ Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerun
 ---
 
 ## 📋 Changelog
+
+### 14.12.2025 - Header-Positionierung & Responsive CTA
+- CTA-Button und Burger-Menü vertikal ausgerichtet bei allen Breakpoints
+- Burger-Menü-Icon mit CSS `top: -15px` Korrektur für kleine Viewports (<768px)
+- Deutsche Parsley.js Validierungsmeldungen hinzugefügt (`functions.php`)
+- Input-Felder auf 100% Breite angepasst
+- Antispam-Feld (Challenge Question) aktiviert und mit orangenem Indikator versehen
+- **CTA-Button responsive optimiert:**
+  - Abstände zwischen CTA und Burger-Menü angepasst (kein Überlappen mehr)
+  - Kompaktere Darstellung auf kleinen Screens (500px-768px)
+  - CTA wird auf sehr kleinen Screens (<400px) ausgeblendet (Logo-Überlappung vermeiden)
+  - Breakpoints: Desktop 95px, 959px 95px, 768px 100px, 500px 120px, <400px hidden
+
+### 12.12.2025 - Formular-Styling & Playwright MCP
+- Formular-CSS überarbeitet (Selektoren `#usp_form` statt `.usp-form`)
+- Pflichtfeld-Indikator (orangener Rand links)
+- Playwright MCP Server installiert für localhost-Testing
+- Dokumentation in `_docs/README.md` aktualisiert
 
 ### 11.12.2025 - Workflow & Formular Setup
 - PublishPress Planner installiert und konfiguriert
@@ -242,7 +266,7 @@ Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerun
 ---
 
 **Erstellt:** 26.11.2025
-**Aktualisiert:** 11.12.2025
-**Version:** 1.2.0 (Workflow & Formular)
+**Aktualisiert:** 14.12.2025
+**Version:** 1.3.1 (Responsive CTA-Optimierung)
 **Entwicklungsumgebung:** macOS mit nginx + php-fpm
 **Ansprechpartner Kunde:** Herr Gruner (Europaschule Köln)
