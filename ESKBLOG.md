@@ -125,6 +125,12 @@ Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerun
 - **PublishPress Planner** – Editorial Workflow & Notifications
 - **User Submitted Posts** – Frontend-Formular für Beitragseinreichung
 
+### Security Plugin (15.12.2025)
+- **Solid Security Basic** – Brute Force Protection, Firewall, Login-Schutz
+
+### Backup Plugin (15.12.2025)
+- **BackWPup** – Automatische Backups (Files + Database)
+
 ---
 
 ## 📁 Projektstruktur
@@ -187,11 +193,14 @@ Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerun
 - [x] Input-Felder auf volle Breite angepasst
 - [x] Antispam-Feld mit orangenem Pflichtfeld-Indikator
 
-### Priorität 5: Sicherheit
-- [ ] Security-Plugin installieren (Solid Security / Wordfence)
-- [ ] Login-Schutz aktivieren
-- [ ] Backup-Lösung einrichten
-- [ ] Firewall konfigurieren
+### Priorität 5: Sicherheit ✅
+- [x] Security-Plugin installieren: **Solid Security Basic** (15.12.2025)
+- [x] Login-Schutz aktivieren (Brute Force Protection)
+- [x] Firewall konfiguriert (Local + Network Brute Force)
+- [x] Starke Passwörter erzwingen
+- [x] Kompromittierte Passwörter ablehnen
+- [x] Two-Factor Authentication aktiviert
+- [x] Backup-Lösung einrichten: **BackWPup** (15.12.2025)
 
 ### Priorität 6: Design & Finalisierung
 - [x] Farben an Europaschule anpassen (via Theme übernommen)
@@ -199,9 +208,12 @@ Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerun
 - [x] Header: CTA-Button und Burger-Menü vertikal ausgerichtet (alle Breakpoints)
 - [x] Burger-Menü 25% größer skaliert
 - [x] Off-Canvas-Menü: Petrol-Hintergrund, weiße Schrift
-- [ ] **Kategorien ins Menü aufnehmen**
-- [ ] **Kategorie-Übersichtsseiten erstellen/stylen**
-- [ ] **Blog-Startseite: Beiträge mit Kategorie-Anzeige**
+- [x] **Kategorien ins Menü aufnehmen** (15.12.2025)
+- [x] **Kategorie-Übersichtsseiten erstellen/stylen** ✅
+- [x] **Blog-Startseite: Beiträge mit Kategorie-Anzeige** ✅
+- [x] **Autoren-Namen auf Beiträgen anzeigen** (16.12.2025)
+- [x] **Formular: Text/Bild bei Validierungsfehler behalten** (16.12.2025)
+- [x] **Success-Seite auf Content-Seite umleiten** (16.12.2025)
 - [ ] Blog-Startseite finalisieren
 - [ ] Mobile-Ansicht testen (weitere Tests)
 
@@ -223,6 +235,44 @@ Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerun
 ---
 
 ## 📋 Changelog
+
+### 16.12.2025 - Author Display, Form Persistence & Success Redirect
+- **Autoren-Namen:** WordPress-User durch eingereichten Namen ersetzt
+  - Filter `the_author` und `get_the_author_display_name` für Uncode-Kompatibilität
+  - Filter `author_link` deaktiviert Links für eingereichte Beiträge
+  - Zeigt `user_submit_name` Meta-Feld statt WP-Benutzername
+- **Formular-Datenpersistenz:** sessionStorage speichert Eingaben bei Validierungsfehlern
+  - Text-, E-Mail-, Select- und TinyMCE-Felder werden gespeichert
+  - Automatische Wiederherstellung beim Neuladen der Seite
+  - Daten werden nach erfolgreicher Übermittlung gelöscht
+- **Success-Redirect:** Weiterleitung zur `/danke/` Seite nach erfolgreicher Einreichung
+  - Action Hook `usp_submit_success` statt Filter
+  - Custom Content-Seite statt Standard-Erfolgsmeldung
+- **Auto-Excerpt:** Automatische Teaser-Generierung für Beiträge ohne Excerpt
+  - `save_post` Hook generiert 20-Wort-Excerpt aus Content
+  - Wichtig für USP-Beiträge (haben standardmäßig kein Excerpt)
+  - Uncode Related Posts zeigen jetzt korrekte Teaser
+- **Danke-Seite:** `/danke/` mit individuellem Inhalt erstellt
+
+### 15.12.2025 - Security & Backup Setup
+- **Solid Security Basic** Plugin installiert und aktiviert
+- Setup-Wizard durchlaufen mit folgenden Einstellungen:
+  - Website-Typ: Blog
+  - Local Brute Force Protection aktiviert
+  - Network Brute Force Protection aktiviert
+  - Starke Passwörter erzwingen (Editor+)
+  - Kompromittierte Passwörter ablehnen
+  - Two-Factor Authentication aktiviert
+  - Security Check Pro aktiviert
+  - Authorized IP: 127.0.0.1 (localhost)
+- Client-Benutzer definiert: Dirk Bosbach, Simone Bosbach
+- Admin-Benutzer für Security: orange
+- **BackWPup** Plugin installiert und konfiguriert:
+  - Vollständiges Backup (Files + Database)
+  - Wöchentlicher automatischer Zeitplan
+  - Speicherort: Website Server (`uploads/backwpup/46bda3/backups/`)
+  - Max. 15 Backups werden aufbewahrt
+  - Erstes Backup erfolgreich gestartet
 
 ### 14.12.2025 - Header-Positionierung & Responsive CTA
 - CTA-Button und Burger-Menü vertikal ausgerichtet bei allen Breakpoints
@@ -266,7 +316,7 @@ Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerun
 ---
 
 **Erstellt:** 26.11.2025
-**Aktualisiert:** 14.12.2025
-**Version:** 1.3.1 (Responsive CTA-Optimierung)
+**Aktualisiert:** 16.12.2025
+**Version:** 1.6.0 (Author Display, Form Persistence, Success Redirect)
 **Entwicklungsumgebung:** macOS mit nginx + php-fpm
 **Ansprechpartner Kunde:** Herr Gruner (Europaschule Köln)

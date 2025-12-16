@@ -402,8 +402,8 @@ dl {
   background-color: var(--brand-secondary, #f49c00);
   color: #fff !important;
   padding: 10px 20px;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 0;
+  font-size: 16px;
   font-weight: 600;
   text-decoration: none;
   transition: background-color 0.3s ease;
@@ -416,10 +416,24 @@ dl {
   color: #fff !important;
 }
 
-/* Mobile Anpassungen */
+/* Tablet: gleiche Einstellungen wie Desktop */
 @media (max-width: 959px) {
   .mobile-cta-menu {
     right: 95px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .mobile-cta-menu .mobile-cta-list a {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+}
+
+/* Kleines Tablet & Mobile: kompakter */
+@media (max-width: 768px) {
+  .mobile-cta-menu {
+    right: 75px;
     top: 50%;
     transform: translateY(-50%);
   }
@@ -430,28 +444,15 @@ dl {
   }
 }
 
-@media (max-width: 768px) {
-  .mobile-cta-menu {
-    right: 100px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .mobile-cta-menu .mobile-cta-list a {
-    padding: 6px 10px;
-    font-size: 11px;
-  }
-}
-
-/* Kleine Screens: CTA kompakter */
+/* Mobile: gleiche Werte wie kleines Tablet */
 @media (max-width: 500px) {
   .mobile-cta-menu {
-    right: 120px;
+    right: 75px;
   }
 
   .mobile-cta-menu .mobile-cta-list a {
-    padding: 5px 8px;
-    font-size: 10px;
+    padding: 8px 14px;
+    font-size: 13px;
   }
 }
 
@@ -832,4 +833,104 @@ body.menu-open-overlay .menu-smart .menu-item-link a span {
   #usp_form input[type="submit"] {
     width: 100%;
   }
+}
+
+/* ========================================
+   Sidebar Search Button - Petrol Background
+   ======================================== */
+.wp-block-search__button,
+.search-form button[type="submit"],
+.widget_search button[type="submit"] {
+  background-color: var(--brand-primary, #145e7e);
+  color: #fff;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.wp-block-search__button:hover,
+.search-form button[type="submit"]:hover,
+.widget_search button[type="submit"]:hover {
+  background-color: var(--brand-secondary, #f49c00);
+  color: #fff;
+}
+
+/* ========================================
+   Sidebar Headings - Spacing
+   ======================================== */
+.widget .wp-block-heading,
+.widget h2,
+aside h2 {
+  margin-bottom: 18px;
+}
+
+/* ========================================
+   Sidebar Links - Hover Effect (Orange)
+   ======================================== */
+.widget a,
+aside a,
+.sidebar a,
+.wp-block-latest-posts a,
+.wp-block-archives a,
+.wp-block-categories a {
+  transition: color 0.2s ease;
+}
+
+.widget a:hover,
+aside a:hover,
+.sidebar a:hover,
+.wp-block-latest-posts a:hover,
+.wp-block-archives a:hover,
+.wp-block-categories a:hover {
+  color: var(--brand-primary, #145e7e) !important;
+}
+
+/* ========================================
+   Category Page - Entry Text White Background
+   Only on category archive pages
+   ======================================== */
+.category .t-entry-text,
+.archive.category .t-entry-text {
+  background-color: #fff;
+  padding: 15px 20px;
+}
+
+/* Category Page - Hide default title wrapper (using Uncode title instead) */
+.category .post-title-wrapper,
+.archive.category .post-title-wrapper {
+  display: none;
+}
+
+/* ========================================
+   Related Posts - Translate and Resize Heading
+   ======================================== */
+/* Hide original text and show German translation */
+.heading-text h5.h5 span {
+  visibility: hidden;
+  position: relative;
+}
+
+.heading-text h5.h5 span::after {
+  content: "Mehr Geschichten";
+  visibility: visible;
+  position: absolute;
+  left: 0;
+}
+
+/* Make heading larger (h2 size instead of h5) */
+.heading-text h5.h5 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Related Posts - Equal Height Cards */
+.post-after .t-inside {
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-after .t-entry-text {
+  flex-grow: 1;
+  min-height: 120px;
 }

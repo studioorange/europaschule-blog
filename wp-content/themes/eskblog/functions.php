@@ -152,7 +152,164 @@ function eskblog_german_validation_messages() {
             });
             Parsley.setLocale('de');
         }
+
+        // Save form data to sessionStorage to prevent data loss on validation errors
+        const form = document.getElementById('usp_form');
+        if (!form) return;
+
+        const storageKey = 'usp_form_data';
+        const fieldsToSave = ['user-submitted-name', 'user-submitted-email', 'user-submitted-title', 'user-submitted-tags', 'user-submitted-category', 'user-submitted-content'];
+
+        // Restore saved data on page load
+        const savedData = sessionStorage.getItem(storageKey);
+        if (savedData) {
+            try {
+                const data = JSON.parse(savedData);
+                fieldsToSave.forEach(function(fieldName) {
+                    if (data[fieldName]) {
+                        const field = form.querySelector('[name="' + fieldName + '"], [name="' + fieldName + '[]"]');
+                        if (field) {
+                            if (field.tagName === 'SELECT') {
+                                field.value = data[fieldName];
+                            } else if (field.tagName === 'TEXTAREA' || field.type === 'text' || field.type === 'email') {
+                                field.value = data[fieldName];
+                            }
+                        }
+                    }
+                });
+                // Restore TinyMCE content
+                if (data['user-submitted-content'] && typeof tinymce !== 'undefined') {
+                    setTimeout(function() {
+                        const editor = tinymce.get('user-submitted-content');
+                        if (editor) {
+                            editor.setContent(data['user-submitted-content']);
+                        }
+                    }, 500);
+                }
+            } catch (e) {
+                console.log('Could not restore form data');
+            }
+        }
+
+        // Save data on input
+        function saveFormData() {
+            const data = {};
+            fieldsToSave.forEach(function(fieldName) {
+                const field = form.querySelector('[name="' + fieldName + '"], [name="' + fieldName + '[]"]');
+                if (field) {
+                    data[fieldName] = field.value;
+                }
+            });
+            // Save TinyMCE content
+            if (typeof tinymce !== 'undefined') {
+                const editor = tinymce.get('user-submitted-content');
+                if (editor) {
+                    data['user-submitted-content'] = editor.getContent();
+                }
+            }
+            sessionStorage.setItem(storageKey, JSON.stringify(data));
+        }
+
+        // Attach listeners to all form fields
+        fieldsToSave.forEach(function(fieldName) {
+            const field = form.querySelector('[name="' + fieldName + '"], [name="' + fieldName + '[]"]');
+            if (field) {
+                field.addEventListener('input', saveFormData);
+                field.addEventListener('change', saveFormData);
+            }
+        });
+
+        // Save TinyMCE content periodically
+        if (typeof tinymce !== 'undefined') {
+            setTimeout(function() {
+                const editor = tinymce.get('user-submitted-content');
+                if (editor) {
+                    editor.on('input change keyup', saveFormData);
+                }
+            }, 1000);
+        }
+
+        // Clear storage on successful submission
+        form.addEventListener('submit', function() {
+            // Don't clear immediately - wait to see if there's an error
+            setTimeout(function() {
+                // Check if we're still on the form page with no success message
+                if (document.querySelector('.usp-success')) {
+                    sessionStorage.removeItem(storageKey);
+                }
+            }, 2000);
+        });
     });
+    </script>
+    <?php
+}
+
+/**
+ * Redirect to thank you page after successful USP form submission
+ * Uses usp_submit_success action hook to override redirect
+ */
+add_action('usp_submit_success', 'eskblog_usp_redirect_to_thanks', 1);
+function eskblog_usp_redirect_to_thanks($redirect) {
+    wp_redirect(home_url('/danke/'));
+    exit;
+}
+
+/**
+ * Auto-generate excerpt for posts without one when saving
+ * Especially important for USP submitted posts
+ */
+add_action('save_post', 'eskblog_auto_generate_excerpt', 10, 3);
+function eskblog_auto_generate_excerpt($post_id, $post, $update) {
+    // Only for posts
+    if ($post->post_type !== 'post') {
+        return;
+    }
+
+    // Don't run on autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    // If excerpt already exists, skip
+    if (!empty($post->post_excerpt)) {
+        return;
+    }
+
+    // Generate excerpt from content
+    $content = $post->post_content;
+    $content = strip_shortcodes($content);
+    $content = wp_strip_all_tags($content);
+    $content = trim($content);
+
+    if (empty($content)) {
+        return;
+    }
+
+    // Limit to ~20 words
+    $excerpt = wp_trim_words($content, 20, '…');
+
+    // Update post without triggering infinite loop
+    remove_action('save_post', 'eskblog_auto_generate_excerpt', 10);
+    wp_update_post(array(
+        'ID' => $post_id,
+        'post_excerpt' => $excerpt
+    ));
+    add_action('save_post', 'eskblog_auto_generate_excerpt', 10, 3);
+}
+
+/**
+ * Clear form data from sessionStorage after successful submission
+ * Works on both thank you page and success query parameter
+ */
+add_action('wp_footer', 'eskblog_clear_form_on_success');
+function eskblog_clear_form_on_success() {
+    // On thank you page or on success parameter
+    if (!is_page('danke') && !isset($_GET['success'])) {
+        return;
+    }
+    ?>
+    <script>
+    sessionStorage.removeItem('usp_form_data');
     </script>
     <?php
 }
@@ -186,3 +343,63 @@ add_action('admin_menu', function() {
  global $submenu;
  unset($submenu['themes.php'][6]);
 });
+
+/**
+ * Translate archive titles to German
+ * Changes "Month:" to "Monat:" for monthly archives
+ */
+add_filter('get_the_archive_title', 'eskblog_translate_archive_titles');
+function eskblog_translate_archive_titles($title) {
+    // Replace "Month:" with "Monat:"
+    $title = str_replace('Month:', 'Monat:', $title);
+
+    // Optional: Also translate other archive labels
+    $title = str_replace('Year:', 'Jahr:', $title);
+    $title = str_replace('Day:', 'Tag:', $title);
+    $title = str_replace('Author:', 'Autor:', $title);
+    $title = str_replace('Archives:', 'Archiv:', $title);
+
+    return $title;
+}
+
+/**
+ * Replace WordPress author with submitted author name
+ * Shows the user_submit_name instead of the WP user who published the post
+ * Filters both the_author and get_the_author_meta for display_name
+ */
+add_filter('the_author', 'eskblog_replace_author_with_submitted_name');
+add_filter('get_the_author_display_name', 'eskblog_replace_author_with_submitted_name');
+function eskblog_replace_author_with_submitted_name($author) {
+    $post_id = get_the_ID();
+    if (!$post_id) {
+        return $author;
+    }
+
+    // Get the submitted author name from USP
+    $submitted_name = get_post_meta($post_id, 'user_submit_name', true);
+
+    if (!empty($submitted_name)) {
+        return esc_html($submitted_name);
+    }
+
+    return $author;
+}
+
+/**
+ * Also filter author link to not link to WP user profile for submitted posts
+ */
+add_filter('author_link', 'eskblog_remove_author_link_for_submitted', 10, 3);
+function eskblog_remove_author_link_for_submitted($link, $author_id, $author_nicename) {
+    $post_id = get_the_ID();
+    if (!$post_id) {
+        return $link;
+    }
+
+    // If this is a user-submitted post, return empty link
+    $submitted_name = get_post_meta($post_id, 'user_submit_name', true);
+    if (!empty($submitted_name)) {
+        return '#';
+    }
+
+    return $link;
+}
