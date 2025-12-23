@@ -136,8 +136,10 @@ Ja, Sie können Titel, Text, Kategorien und Bilder vor der Freigabe anpassen.
 ## 8. Kontakt bei Problemen
 
 **Technischer Support:** Studio Orange
-**E-Mail:** [support@studioorange.de]
+**E-Mail:** [kontakt@studioorange.de]
 
 ---
 
 *Stand: 16.12.2025*
+
+

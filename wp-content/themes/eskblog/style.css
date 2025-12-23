@@ -93,12 +93,6 @@ Text Domain: eskblog
   box-shadow: none;
 }
 
-/* Deactivate top border for top bar
-.body-borders[data-border="27"] .top-border {
-    height: 0px !important;
-}
- */
-
 /* Logo */
 
 #menu-primary-menu,
@@ -127,9 +121,6 @@ Text Domain: eskblog
   top: 120%;
   left: 0;
   pointer-events: none;
-}
-
-.btn-link:before {
   transform-origin: 0% 50%;
   transform: scale3d(1, 1, 1);
 }
@@ -193,13 +184,11 @@ a.custom-link:active {
   border-bottom: solid 2px #145e7e;
   transform: scaleX(0);
   transition: transform 250ms ease-in-out;
+  transform-origin: 0% 50%;
 }
 
 .uncode_text_column a:hover:after {
   transform: scaleX(1);
-}
-.uncode_text_column a:after {
-  transform-origin: 0% 50%;
 }
 
 .mat-footer a {
@@ -213,13 +202,11 @@ a.custom-link:active {
   border-bottom: solid 1px #fff;
   transform: scaleX(0);
   transition: transform 250ms ease-in-out;
+  transform-origin: 0% 50%;
 }
 
 .mat-footer a:hover:after {
   transform: scaleX(1);
-}
-.mat-footer a:after {
-  transform-origin: 0% 50%;
 }
 
 .tmb-dark.tmb .t-entry-text .t-entry-title a:hover,
@@ -254,14 +241,6 @@ ul.icons {
 .submenu-dark .menu-horizontal.menu-sub-enhanced .menu-smart ul li.active > a {
   color: rgba(255, 255, 255, 0.65) !important;
 }
-
-/* Menu 
-
-#menu-primary-menu,
-.menu-smart {
-  margin-top: 20px;
-}
-*/
 
 /* Sitemenu */
 
@@ -614,7 +593,7 @@ body.menu-open-overlay .menu-smart .menu-item-link a span {
   max-width: 100%;
   padding: 12px 16px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 0;
   font-size: 16px;
   font-family: inherit;
   background-color: #fff;
@@ -636,7 +615,7 @@ body.menu-open-overlay .menu-smart .menu-item-link a span {
   width: 100%;
   padding: 12px 16px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 0;
   font-size: 16px;
   font-family: inherit;
   background-color: #fff;
@@ -659,7 +638,7 @@ body.menu-open-overlay .menu-smart .menu-item-link a span {
   min-height: 200px;
   padding: 12px 16px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 0;
   font-size: 16px;
   font-family: inherit;
   resize: vertical;
@@ -676,7 +655,7 @@ body.menu-open-overlay .menu-smart .menu-item-link a span {
 /* WP Editor Container */
 #usp_form .wp-editor-wrap {
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 0;
   overflow: hidden;
 }
 
@@ -815,12 +794,18 @@ body.menu-open-overlay .menu-smart .menu-item-link a span {
 }
 
 /* Required Field Indicator */
-#usp_form input[required],
+#usp_form input[type="text"][required],
+#usp_form input[type="email"][required],
 #usp_form select[required],
 #usp_form textarea[required],
 #usp_form #user-submitted-captcha,
 #usp_form .user-submitted-captcha {
   border-left: 3px solid var(--brand-secondary, #f49c00);
+}
+
+/* Exclude checkbox from required border styling */
+#usp_form input[type="checkbox"][required] {
+  border-left: none;
 }
 
 /* Responsive */
@@ -833,6 +818,131 @@ body.menu-open-overlay .menu-smart .menu-item-link a span {
   #usp_form input[type="submit"] {
     width: 100%;
   }
+}
+
+/* Two-Step Form */
+.usp-form-step {
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+.usp-step-hidden {
+  display: none !important;
+}
+
+.usp-step-active {
+  display: block;
+}
+
+#usp-step-1 {
+  background: var(--brand-light, #f7f7f7);
+  padding: 24px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #e0e0e0;
+}
+
+#usp-step-1::before {
+  content: "Schritt 1: Verifizierung";
+  display: block;
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: var(--brand-primary, #145e7e);
+}
+
+#usp-step-2::before {
+  content: "Schritt 2: Beitrag erstellen";
+  display: block;
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: var(--brand-primary, #145e7e);
+}
+
+#usp-continue-btn {
+  width: 100%;
+  margin-top: 16px;
+}
+
+#usp-back-btn {
+  background: transparent;
+  color: var(--brand-primary, #145e7e);
+  border: 1px solid var(--brand-primary, #145e7e);
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#usp-back-btn:hover {
+  background-color: var(--brand-primary, #145e7e);
+  color: #fff;
+}
+
+/* Error state for fields */
+#usp_form .usp-error {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15) !important;
+}
+
+/* Captcha error message */
+.usp-captcha-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin: 16px 0;
+  border: 1px solid #f5c6cb;
+  font-weight: 500;
+}
+
+.usp-captcha-error.usp-hidden {
+  display: none;
+}
+
+/* Disabled button state */
+#usp-continue-btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* Custom Checkbox (Image Rights) */
+#usp_form fieldset.usp-checkbox {
+  background: #fff8e6;
+  border: 1px solid var(--brand-secondary, #f49c00);
+  border-radius: 0;
+  padding: 20px 24px;
+  margin-top: 16px;
+}
+
+div#user-submitted-posts fieldset.usp-checkbox {
+  padding: 20px 0 20px 20px;
+}
+
+#usp_form .usp-checkbox label {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+#usp_form .usp-checkbox input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  margin-top: 0;
+  cursor: pointer;
+  accent-color: var(--brand-primary, #145e7e);
+  appearance: auto;
+  -webkit-appearance: checkbox;
+  background-color: #fff !important;
+  border: 2px solid #666 !important;
+  border-radius: 3px;
 }
 
 /* ========================================

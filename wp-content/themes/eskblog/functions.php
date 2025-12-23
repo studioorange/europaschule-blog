@@ -112,6 +112,29 @@ function eskblog_mobile_cta_button($content) {
 }
 
 /**
+ * AJAX endpoint to verify captcha answer before showing full form
+ * Prevents users from seeing the form if they don't know the answer
+ */
+add_action('wp_ajax_eskblog_verify_captcha', 'eskblog_verify_captcha');
+add_action('wp_ajax_nopriv_eskblog_verify_captcha', 'eskblog_verify_captcha');
+function eskblog_verify_captcha() {
+    $usp_options = get_option('usp_options');
+    $correct_answer = isset($usp_options['usp_response']) ? $usp_options['usp_response'] : '';
+    $case_sensitive = isset($usp_options['usp_casing']) ? $usp_options['usp_casing'] : false;
+
+    $user_answer = isset($_POST['answer']) ? sanitize_text_field($_POST['answer']) : '';
+
+    // Compare answers
+    if ($case_sensitive) {
+        $is_correct = ($user_answer === $correct_answer);
+    } else {
+        $is_correct = (strtolower($user_answer) === strtolower($correct_answer));
+    }
+
+    wp_send_json(array('valid' => $is_correct));
+}
+
+/**
  * German validation messages for User Submitted Posts form
  * Overrides Parsley.js validation messages to German
  */
@@ -153,16 +176,164 @@ function eskblog_german_validation_messages() {
             Parsley.setLocale('de');
         }
 
-        // Save form data to sessionStorage to prevent data loss on validation errors
+        // Two-step form: Show verification first, then rest of form
         const form = document.getElementById('usp_form');
         if (!form) return;
 
+        // Create step containers
+        const step1Fields = ['usp-name', 'usp-email', 'usp-captcha'];
+        const step1Container = document.createElement('div');
+        step1Container.id = 'usp-step-1';
+        step1Container.className = 'usp-form-step usp-step-active';
+
+        const step2Container = document.createElement('div');
+        step2Container.id = 'usp-step-2';
+        step2Container.className = 'usp-form-step usp-step-hidden';
+
+        // Get all fieldsets
+        const fieldsets = form.querySelectorAll('fieldset');
+        const submitDiv = form.querySelector('#usp-submit');
+        const errorDiv = form.querySelector('#usp-error-message');
+
+        // Move fieldsets to appropriate containers
+        fieldsets.forEach(function(fieldset) {
+            const classes = fieldset.className;
+            if (step1Fields.some(cls => classes.includes(cls))) {
+                step1Container.appendChild(fieldset);
+            } else {
+                step2Container.appendChild(fieldset);
+            }
+        });
+
+        // Create "Continue" button for step 1
+        const continueBtn = document.createElement('button');
+        continueBtn.type = 'button';
+        continueBtn.id = 'usp-continue-btn';
+        continueBtn.className = 'usp-submit';
+        continueBtn.textContent = 'Weiter zum Formular';
+        step1Container.appendChild(continueBtn);
+
+        // Create "Back" button for step 2
+        const backBtn = document.createElement('button');
+        backBtn.type = 'button';
+        backBtn.id = 'usp-back-btn';
+        backBtn.className = 'usp-back-btn';
+        backBtn.textContent = '← Zurück';
+
+        // Insert containers into form
+        if (errorDiv && errorDiv.nextSibling) {
+            form.insertBefore(step1Container, errorDiv.nextSibling);
+        } else {
+            form.insertBefore(step1Container, form.firstChild);
+        }
+        form.insertBefore(step2Container, submitDiv);
+        step2Container.insertBefore(backBtn, step2Container.firstChild);
+        step2Container.appendChild(submitDiv);
+
+        // Create error message element for captcha
+        const captchaError = document.createElement('div');
+        captchaError.id = 'usp-captcha-error';
+        captchaError.className = 'usp-captcha-error usp-hidden';
+        captchaError.textContent = 'Die Antwort ist leider falsch. Bitte versuchen Sie es erneut.';
+        step1Container.insertBefore(captchaError, continueBtn);
+
+        // Step navigation logic with server-side captcha validation
+        continueBtn.addEventListener('click', function() {
+            // Validate step 1 fields
+            const nameField = form.querySelector('[name="user-submitted-name"]');
+            const emailField = form.querySelector('[name="user-submitted-email"]');
+            const captchaField = form.querySelector('[name="user-submitted-captcha"]');
+
+            let valid = true;
+            let firstInvalid = null;
+
+            // Hide previous captcha error
+            captchaError.classList.add('usp-hidden');
+
+            // Check required fields in step 1
+            [nameField, emailField, captchaField].forEach(function(field) {
+                if (field && field.hasAttribute('required') && !field.value.trim()) {
+                    field.classList.add('usp-error');
+                    valid = false;
+                    if (!firstInvalid) firstInvalid = field;
+                } else if (field) {
+                    field.classList.remove('usp-error');
+                }
+            });
+
+            // Email format check
+            if (emailField && emailField.value && !emailField.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                emailField.classList.add('usp-error');
+                valid = false;
+                if (!firstInvalid) firstInvalid = emailField;
+            }
+
+            if (!valid) {
+                if (firstInvalid) firstInvalid.focus();
+                return;
+            }
+
+            // Disable button during validation
+            continueBtn.disabled = true;
+            continueBtn.textContent = 'Wird geprüft...';
+
+            // Verify captcha answer via AJAX
+            const formData = new FormData();
+            formData.append('action', 'eskblog_verify_captcha');
+            formData.append('answer', captchaField.value);
+
+            fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                continueBtn.disabled = false;
+                continueBtn.textContent = 'Weiter zum Formular';
+
+                if (data.valid) {
+                    // Captcha correct - move to step 2
+                    captchaField.classList.remove('usp-error');
+                    step1Container.classList.remove('usp-step-active');
+                    step1Container.classList.add('usp-step-hidden');
+                    step2Container.classList.remove('usp-step-hidden');
+                    step2Container.classList.add('usp-step-active');
+                    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    // Captcha wrong - show error
+                    captchaField.classList.add('usp-error');
+                    captchaError.classList.remove('usp-hidden');
+                    captchaField.focus();
+                }
+            })
+            .catch(error => {
+                continueBtn.disabled = false;
+                continueBtn.textContent = 'Weiter zum Formular';
+                console.error('Captcha verification failed:', error);
+            });
+        });
+
+        backBtn.addEventListener('click', function() {
+            step2Container.classList.remove('usp-step-active');
+            step2Container.classList.add('usp-step-hidden');
+            step1Container.classList.remove('usp-step-hidden');
+            step1Container.classList.add('usp-step-active');
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        // Save form data to sessionStorage on submit for validation errors
+        // Clear when leaving page without submitting (browser close, navigate away)
+
         const storageKey = 'usp_form_data';
+        const submitFlagKey = 'usp_form_submitted';
         const fieldsToSave = ['user-submitted-name', 'user-submitted-email', 'user-submitted-title', 'user-submitted-tags', 'user-submitted-category', 'user-submitted-content'];
 
-        // Restore saved data on page load
+        // Check if we're returning from a form submit (validation error)
+        const wasSubmitted = sessionStorage.getItem(submitFlagKey);
         const savedData = sessionStorage.getItem(storageKey);
-        if (savedData) {
+
+        if (wasSubmitted && savedData) {
+            // Restore saved data after validation error
             try {
                 const data = JSON.parse(savedData);
                 fieldsToSave.forEach(function(fieldName) {
@@ -189,9 +360,15 @@ function eskblog_german_validation_messages() {
             } catch (e) {
                 console.log('Could not restore form data');
             }
+            // Keep data for potential next validation error, but clear submit flag
+            sessionStorage.removeItem(submitFlagKey);
+        } else {
+            // Fresh page load (not from submit) - clear any old data
+            sessionStorage.removeItem(storageKey);
+            sessionStorage.removeItem(submitFlagKey);
         }
 
-        // Save data on input
+        // Save data function
         function saveFormData() {
             const data = {};
             fieldsToSave.forEach(function(fieldName) {
@@ -210,34 +387,10 @@ function eskblog_german_validation_messages() {
             sessionStorage.setItem(storageKey, JSON.stringify(data));
         }
 
-        // Attach listeners to all form fields
-        fieldsToSave.forEach(function(fieldName) {
-            const field = form.querySelector('[name="' + fieldName + '"], [name="' + fieldName + '[]"]');
-            if (field) {
-                field.addEventListener('input', saveFormData);
-                field.addEventListener('change', saveFormData);
-            }
-        });
-
-        // Save TinyMCE content periodically
-        if (typeof tinymce !== 'undefined') {
-            setTimeout(function() {
-                const editor = tinymce.get('user-submitted-content');
-                if (editor) {
-                    editor.on('input change keyup', saveFormData);
-                }
-            }, 1000);
-        }
-
-        // Clear storage on successful submission
+        // Save data when form is submitted (set flag to indicate submit happened)
         form.addEventListener('submit', function() {
-            // Don't clear immediately - wait to see if there's an error
-            setTimeout(function() {
-                // Check if we're still on the form page with no success message
-                if (document.querySelector('.usp-success')) {
-                    sessionStorage.removeItem(storageKey);
-                }
-            }, 2000);
+            sessionStorage.setItem(submitFlagKey, 'true');
+            saveFormData();
         });
     });
     </script>
