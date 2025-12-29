@@ -140,6 +140,6 @@ Ja, Sie können Titel, Text, Kategorien und Bilder vor der Freigabe anpassen.
 
 ---
 
-*Stand: 16.12.2025*
+*Stand: 29.12.2025*
 
 

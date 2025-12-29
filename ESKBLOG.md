@@ -5,10 +5,46 @@
 **Website:** Blog für Europaschule Köln - Schüler & Alumni Community
 **Anlass:** 50-Jahresfeier der Europaschule Köln
 
-**Live-URL (geplant):** https://blog.europaschulekoeln.eu
+**DEV-Server:** https://europaschulekoeln.eu/blog/
 **Lokal:** http://localhost:8201
 
-**Status:** ✅ Installation abgeschlossen - Grundkonfiguration läuft
+**Status:** ✅ DEV-Server online - Passwortgeschützt (Password Protected Plugin)
+
+---
+
+## 🌐 DEV-Server Zugangsdaten
+
+### WordPress Admin
+- **URL:** https://europaschulekoeln.eu/blog/wp-admin/
+- **Passwortschutz:** Via "Password Protected" Plugin (Einstellungen → Password Protected)
+
+### SSH/SFTP Zugang
+- **Host:** 92.205.176.135
+- **User:** dirkbosbach
+- **Password:** hggxjm98PPH$pa#7
+- **WordPress-Verzeichnis:** `/httpdocs/blog/`
+
+### Datenbank (DEV)
+- **Host:** localhost
+- **Database:** eskblog_2026
+- **User:** esk-blog
+- **Password:** 9_f00ebS8
+- **Prefix:** eskb_
+
+### Hosting
+- **Provider:** HostEurope VPS
+- **Panel:** Plesk
+- **Webserver:** nginx (kein .htaccess-Support!)
+
+### Redakteur-Benutzer (Lehrer)
+| Benutzer | Name | E-Mail | Passwort |
+|----------|------|--------|----------|
+| dejan | Dejan Miladinovic | esk.miladonovic@schulen-koeln.de | `le!D0BbP99MGC9duKvnkMf8X` |
+| matthias | Matthias Lechner | esk.lechner@schulen-koeln.de | `!uABLOCqlDc9Q%F161roi53F` |
+| nicki | Nicki Olivari | esk.olivari@schulen-koeln.de | `s!o7@17L8VBuBdqAyaIKUFUY` |
+
+**Rolle:** Redakteur (Editor) - kann Beiträge prüfen, bearbeiten und freigeben
+**Status:** Angelegt am 29.12.2025 - Passwörter noch nicht verschickt
 
 ---
 
@@ -202,7 +238,7 @@ Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerun
 - [x] Two-Factor Authentication aktiviert
 - [x] Backup-Lösung einrichten: **BackWPup** (15.12.2025)
 
-### Priorität 6: Design & Finalisierung
+### Priorität 6: Design & Finalisierung ✅
 - [x] Farben an Europaschule anpassen (via Theme übernommen)
 - [x] Footer Content Block importiert (ID: 166309)
 - [x] Header: CTA-Button und Burger-Menü vertikal ausgerichtet (alle Breakpoints)
@@ -214,13 +250,32 @@ Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerun
 - [x] **Autoren-Namen auf Beiträgen anzeigen** (16.12.2025)
 - [x] **Formular: Text/Bild bei Validierungsfehler behalten** (16.12.2025)
 - [x] **Success-Seite auf Content-Seite umleiten** (16.12.2025)
+- [x] **Zweistufiges Formular mit AJAX-Captcha** (29.12.2025)
+- [x] **Bildrechte-Checkbox mit Pflichtfeld** (29.12.2025)
 - [ ] Blog-Startseite finalisieren
 - [ ] Mobile-Ansicht testen (weitere Tests)
 
-### Priorität 7: Dokumentation & Schulung
-- [ ] Admin-Anleitung für Freigabeprozess erstellen
+### Priorität 7: DEV-Server Deployment ✅
+- [x] Git-Repository auf GitHub angelegt und public gesetzt (29.12.2025)
+- [x] SSH-Zugang bei HostEurope aktiviert
+- [x] WordPress Core auf DEV-Server installiert
+- [x] Datenbank migriert mit URL-Ersetzung
+- [x] wp-content (Themes, Plugins, Uploads) übertragen
+- [x] wp-config.php für Produktion konfiguriert
+- [x] **Password Protected** Plugin installiert (Passwortschutz für DEV)
+- [x] WP_DEBUG deaktiviert
+
+### Priorität 8: Benutzer & Schulung
+- [x] Admin-Anleitung für Freigabeprozess erstellen (ADMIN-ANLEITUNG.md)
+- [x] **Redakteur-Benutzer angelegt** (29.12.2025) - Passwörter noch nicht verschickt
+- [ ] Passwörter an Redakteure versenden (nach den Ferien)
 - [ ] Schritt-für-Schritt-Anleitung für Schüler/Alumni
 - [ ] Online-Schulung durchführen (60 Min.)
+
+### Priorität 9: Performance (nach Freischaltung)
+- [ ] Caching-Plugin installieren (WP Super Cache oder ähnlich)
+- [ ] Seiten-Cache aktivieren
+- [ ] Browser-Caching konfigurieren
 
 ---
 
@@ -228,13 +283,39 @@ Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerun
 
 1. ~~**Benutzerrollen:** Contributor/Editor-Rollen konfigurieren~~ ✅
 2. ~~**Freigabe-Workflow:** PublishPress Planner eingerichtet~~ ✅
-3. **Frontend-Formular:** Styling anpassen, Seite erstellen
-4. **Sicherheit:** Security-Plugins aktivieren
-5. **Schulung:** Dokumentation und Einweisung vorbereiten
+3. ~~**Frontend-Formular:** Styling anpassen, Seite erstellen~~ ✅
+4. ~~**Sicherheit:** Security-Plugins aktivieren~~ ✅
+5. ~~**DEV-Server Deployment:** Blog auf HostEurope installiert~~ ✅
+6. **Schulung:** Dokumentation und Einweisung vorbereiten
+7. **Go-Live:** Passwortschutz entfernen, Caching aktivieren
 
 ---
 
 ## 📋 Changelog
+
+### 29.12.2025 - DEV-Server Deployment & Formular-Optimierung
+- **DEV-Server Deployment auf HostEurope:**
+  - Git-Repository auf GitHub public gesetzt
+  - WordPress Core via SSH auf DEV-Server installiert
+  - Ursprünglich geplant: Subdomain `blog.europaschulekoeln.eu`
+  - Geändert zu Subdirectory: `europaschulekoeln.eu/blog/` (DNS-Propagierung Probleme)
+  - Datenbank mit URL-Ersetzung migriert (localhost:8201 → europaschulekoeln.eu/blog)
+  - wp-content komplett übertragen (~168MB Plugins, ~26MB Uncode Theme)
+  - wp-config.php mit Produktions-Credentials erstellt
+  - WP_DEBUG und WP_DEBUG_LOG deaktiviert
+- **Passwortschutz:**
+  - .htaccess funktioniert nicht (nginx-Server)
+  - **Password Protected** Plugin via WP-CLI installiert
+  - DEV-Seite ist passwortgeschützt bis zur Freigabe
+- **Formular-Optimierung:**
+  - Zweistufiges Formular mit AJAX-Captcha-Validierung
+  - Bildrechte-Checkbox als Pflichtfeld hinzugefügt
+  - CSS-Optimierung und sessionStorage-Fix
+- **Redakteur-Benutzer angelegt:**
+  - Dejan Miladinovic, Matthias Lechner, Nicki Olivari
+  - Rolle: Editor (Beiträge prüfen und freigeben)
+  - Passwörter noch nicht verschickt (nach den Ferien)
+- **Bugfix:** USP-Plugin-Optionen auf DEV-Server nachgetragen (Captcha-Frage fehlte)
 
 ### 16.12.2025 - Author Display, Form Persistence & Success Redirect
 - **Autoren-Namen:** WordPress-User durch eingereichten Namen ersetzt
@@ -316,7 +397,8 @@ Ehemalige und aktuelle Schüler sollen witzige Geschichten, Bilder und Erinnerun
 ---
 
 **Erstellt:** 26.11.2025
-**Aktualisiert:** 16.12.2025
-**Version:** 1.6.0 (Author Display, Form Persistence, Success Redirect)
+**Aktualisiert:** 29.12.2025
+**Version:** 1.7.0 (DEV-Server Deployment)
 **Entwicklungsumgebung:** macOS mit nginx + php-fpm
+**DEV-Server:** HostEurope VPS (nginx + Plesk)
 **Ansprechpartner Kunde:** Herr Gruner (Europaschule Köln)
